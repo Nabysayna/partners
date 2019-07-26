@@ -1,146 +1,619 @@
-<div class="container">
+<div *ngIf="connected==true" class="container">
   <!-- <div class="row title" >
       <h1>Paiement De Facture</h1>
   </div> -->
-  <div class="row">
-      <tabset #staticTabs style="width:100%; text-align:center;">
-          <tab heading="TNT">
-                <div class="col-12" *ngIf="etapetnt==1">
-                    <form  style="width:50%; margin-left:25%; margin-top:4%; border: 1px solid #36a9e0;padding: 8%;border-radius: 4rem 0rem;">
-                        <div class="form-group">
-                          <label for="formGroupExampleInput">Numéro carte ou numéro téléphone propre</label>
-                          <input style="border-radius: 2rem 0rem 2rem 2rem;" stype="text" class="form-control input-sm" id="numero" placeholder="numero" [(ngModel)]="this.numero" name="numero">
-                        </div>
-                        <div class="form-group">
-                          <input style="border-radius: 2rem 0rem 2rem 2rem; margin-top: 8%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="rechercher" (click)="infoNumeroTnt()">
-                        </div>
-                      </form>
-                </div>
+  <div class="row" style="background-color: #FFCE00; padding: 1rem;">
+    <div class="col-sm-11 col-xs-10" style="width:100%; text-align:center; background-color: #FFCE00">
+        <tabset #staticTabs style="width:100%; text-align:center; background-color: #FFCE00">
 
-                <div class="col-12" *ngIf="etapetnt==2">
-                    <form  style="width:80%; margin-left:10%; margin-top:4%; border: 1px solid #36a9e0;padding: 6%;border-radius: 4rem 0rem;"  class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Nom Client</label>
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="nom" placeholder="nom" [(ngModel)]="this.nom" name="nom">
-                            </div>
-                        </div>
+              <tab heading="ACCUEIL" style="background-color: white ; padding-bottom: 3rem ; box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)">
 
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Prénom Client</label>
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="prenom" placeholder="prenom" [(ngModel)]="this.prenom" name="prenom">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Téléphone Client</label>
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="tel" placeholder="tel" [(ngModel)]="this.tel" name="tel">
-                            </div>
-                        </div>
-  
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Numéro Chip </label>
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="numeroChip" placeholder="numeroChip" [(ngModel)]="this.numeroChip" name="numeroChip">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Numéro Carte</label>
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="numeroCarte" placeholder="numeroCarte" [(ngModel)]="this.numeroCarte" name="numeroCarte">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="retoure" (click)="etapetnt=1">
-                                <input style="border-radius: 2rem 0rem 2rem 2rem; margin-left: 6%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="rechercher" (click)="openModal(template)">
-                            </div>
-                        </div>
-                      </form>
-                </div>
+                    <i  *ngIf=" tntloading==true" class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
 
-                <div class="col-12" *ngIf="etapetnt==3">
-                    <form  style="width:50%; margin-left:25%; margin-top:6%; text-align:center; border: 1px solid #36a9e0;padding: 6%;border-radius: 4rem 0rem;"  class="row">
-                        <div class="col-12">
-                              <h5><b>Vous allez payer <span style="color:red;">4750</span> fca</b></h5>
-                        </div>
+                    <div class="col-12" *ngIf="erreur!='undefined' && erreur!='success' " style="color:red;">
+                            {{this.erreur}}
+                    </div>
+                                   
+                    <div class="col-12">
+                        <div class="row">
+                            <form class="form pull-right" style="margin-left: 35%;
+                                margin-right: 35%;
+                                margin-top: 6rem;
+                                padding: 3rem; background-color: white">
 
-                        <div class="col-12">
-                            <div class="form-group row">
-                                <div class="form-group row">
-                                    <div class="col-12">
-                                        <label for="formGroupExampleInput">Quel est votre mode de paiement ?</label>
-                                    </div>
-                                    <div class="col-12">
-                                        <form style="width: 100%;">
-                                            <div class="form-check form-check-inline" style="width: 100%;">
-                                                <input  [(ngModel)]="this.OrangeMoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="OrangeMoneyRadio" value="OrangeMoneyRadio" checked>
-                                                <label class="form-check-label" for="OrangeMoney">
-                                                    Orange Money
-                                                </label>
+                                <div class="form-group">
+                                    <h3 style=" text-align: center ; width: max-content; margin-bottom: 2rem">
+                                        <span style="padding: 1rem ; color: white ; background-color: black ; font-weight: bold ;"> CANAL+ </span>
+                                        <span style="padding: 1rem ; color: white ; background-color: red; font-weight: bold ;"> SENEGAL </span>
+                                    </h3>
+                                </div>
+                            </form>
+                            
+                        </div>
+                        <div class="row justify-content-center">
+                                <form   class="col-10 col-lg-6" style="margin-top:4%; border: 1px solid #36a9e0;padding: 6%; display: none">
+                                   <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Nom Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="nom" placeholder="nom" [(ngModel)]="this.nomAb" name="nom">
                                             </div>
-                                            <div class="form-check form-check-inline" style="width: 100%;">
-                                                <input [(ngModel)]="this.tigocashRadio" class="form-check-input" type="radio" name="modedepaiement" id="tigocashRadio" value="tigocashRadio">
-                                                <label class="form-check-label" for="tigocashRadio">
-                                                    Tiguo Cash
-                                                </label>
+                                        </div>
+                
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Prénom Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="prenom" placeholder="prenom" [(ngModel)]="this.prenomAb" name="prenom">
                                             </div>
-                                            <div class="form-check form-check-inline" style="width: 100%;">
-                                                <input  [(ngModel)]="this.emoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="emoneyRadio" value="emoneyRadio">
-                                                <label class="form-check-label" for="emoneyRadio">
-                                                    E-MONEY
-                                                </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Téléphone Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="nom" placeholder="Telephone" [(ngModel)]="this.tel" name="nom">
                                             </div>
-                                            <div class="form-check form-check-inline" style="width: 100%;">
-                                                <input [(ngModel)]="this.postcashRadio" class="form-check-input" type="radio" name="modedepaiement" id="postcashRadio" value="postcashRadio">
-                                                <label class="form-check-label" for="postcashRadio">
-                                                    POSTCASH
-                                                </label>
+                                        </div>
+                
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Adresse Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="prenom" placeholder="Adresse" [(ngModel)]="this.adress" name="prenom">
                                             </div>
-                                            <div class="form-check form-check-inline" style="width: 100%;">
-                                                <input [(ngModel)]="this.wizallRadio" class="form-check-input" type="radio" name="modedepaiement" id="wizallRadio" value="wizallRadio">
-                                                <label class="form-check-label" for="wizallRadio">
-                                                    WIZALL
-                                                </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Numéro Materiel</label>
+                                                <input  style="" type="number" class="form-control input-sm" id="tel" placeholder="Numéro Decodeur" [(ngModel)]="this.numAb" name="tel">
                                             </div>
-                                          </form>
-                                    </div>
+                                        </div>
+                    
+                                        <div class="row">
+                                            <div class="form-group  col-12">
+                                                <label for="formGroupExampleInput">Bouquet</label>
+                                                <select   style="" class="form-control input-sm" id="typeDeBouquet" placeholder="numero Carte" [(ngModel)]="this.Bouquet" name="typeDeBouquet" (click)="getMontantDec()" (change)="getMontantDec()">
+                                                    <option *ngFor="let l of listeBouquet" value="{{l.libelle}}">{{l.libelle}}</option>
+                                                </select>
+                                              </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group  col-12">
+                                                <label for="formGroupMontantNet">{{montantNet}} FCFA</label>
+                                              </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=1; this.erreur='undefined';this.success='undefined'">
+                                                <input style="margin-left: 6%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="openModal(templateCanalConfirm)">
+                                            </div>
+                                        </div>
+                                   </div>
+                                </form>
+                        </div>
+                    </div>
+
+                    <div class="col-12" *ngIf="etapetnt==3">
+                        <div class="row justify-content-center">
+                                <form  class="col-10 col-lg-6 " style="margin-top:6%; text-align:center; border: 1px solid #36a9e0;padding: 6%;">
+                                        <div class="col-12">
+                                              <h5><b>Vous allez payer <span style="color:red;">{{montant}}</span> fca</b></h5>
+                                        </div>
+                
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="form-group row">
+                                                    <div class="col-12">
+                                                        <label for="formGroupExampleInput">Quel est votre mode de Paiement ?</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <form style="width: 100%;">
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.OrangeMoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="1" checked>
+                                                                <label class="form-check-label" for="OrangeMoney">
+                                                                    Orange Money
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.tigocashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="2">
+                                                                <label class="form-check-label" for="tigocashRadio">
+                                                                    Tiguo Cash
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.emoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="3">
+                                                                <label class="form-check-label" for="emoneyRadio">
+                                                                    E-MONEY
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.postcashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="4">
+                                                                <label class="form-check-label" for="postcashRadio">
+                                                                    POSTCASH
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.wizallRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="5">
+                                                                <label class="form-check-label" for="wizallRadio">
+                                                                    WIZALL
+                                                                </label>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="col-5">
+                                                    <label for="formGroupExampleInput">Numéro Associé</label>
+                                                </div>
+                                                <div class="col-7">
+                                                    <input [disabled]="!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio" style="" type="text" class="form-control input-sm" id="numeroassocie" placeholder="numeroassocie" [(ngModel)]="this.numeroassocie" name="numeroassocie">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=2; this.erreur='undefined';this.success='undefined'">
+                                                <input [disabled]="(!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio) || !numberTest(this.numeroassocie)" style="margin-left: 6%; " type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="validerpaiementTnt();">
+                                            </div>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==4">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-check" style="color:green; font-size:8rem;"></i>
+                                        <h2 style="color:green;">Opèration réussie. Merci d'avoir choisi notre service</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" 
+                                        (click)="this.print('canal') ;this.reinitialiser();etapetnt=1;">OK</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group row">
-                                <div class="col-5">
-                                    <label for="formGroupExampleInput">Numéro Associé</label>
-                                </div>
-                                <div class="col-7">
-                                    <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="numeroassocie" placeholder="numeroassocie" [(ngModel)]="this.numeroassocie" name="numeroassocie">
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==0">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-exclamation-triangle" style="color:red; font-size:8rem;"></i>
+                                        <h2 style="color:green;">L'opèration a échouée ; vérifiez votre solde</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" (click)="this.reinitialiser();etapetnt=1;">OK</button>
                                 </div>
                             </div>
+                    </div>
+
+              </tab>
+
+              <tab heading="ABONNEMENT" style="background-color: white ; padding-bottom: 3rem ; box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)">
+                    <i  *ngIf=" tntloading==true" class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
+
+                    <div class="col-12" *ngIf="erreur!='undefined'" style="color:red;">
+                            {{this.erreur}}
+                    </div>
+                    
+                   
+                    <div class="col-12" *ngIf="etapetnt==1">
+                        <div class="row justify-content-center">
+                            <form  class="col-10 col-lg-6 col-md-6" style=" margin-top:8%; border: 1px solid #36a9e0;padding: 8%;">
+                                <div class="form-group">
+                                  <label for="formGroupExampleInput">Numéro Abonné, Materiel ou téléphone</label>
+                                  <input style="" stype="text" class="form-control input-sm" id="numero" placeholder="Numéro" [(ngModel)]="this.numero" name="numero">
+                                </div>
+                                <div class="form-group">
+                                  <input [disabled]=" !this.numero" style="margin-top: 8%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="Rechercher" (click)="infoNumeroCanal()">
+                                </div>
+                            </form>
                         </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="retoure" (click)="etapetnt=2">
-                                <input style="border-radius: 2rem 0rem 2rem 2rem;    margin-left: 6%; " type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="rechercher" (click)="validerpaiementTnt();">
+                    </div>
+
+                    <div class="col-12" *ngIf="etapetnt==2">
+                        <div class="row justify-content-center">
+                                <form   class="col-10 col-lg-6" style="margin-top:4%; border: 1px solid #36a9e0;padding: 6%;">
+                                   <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Nom Client</label>
+                                                <input [disabled]="true" style="" type="text" class="form-control input-sm" id="nom" placeholder="nom" [(ngModel)]="this.nomAb" name="nom">
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Prénom Client</label>
+                                                <input [disabled]="true" style="" type="text" class="form-control input-sm" id="prenom" placeholder="prenom" [(ngModel)]="this.prenomAb" name="prenom">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Numéro Abonné</label>
+                                                <input [disabled]="true" style="" type="text" class="form-control input-sm" id="tel" placeholder="tel" [(ngModel)]="this.numAb" name="tel">
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Numéro Décodeur</label>
+                                                <input [disabled]="true" style="" type="text" class="form-control input-sm" id="numeroChip" placeholder="numeroChip" [(ngModel)]="this.matAb" name="numeroChip">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Formule actuelle</label>
+                                                <input [disabled]="true" style="" type="text" class="form-control input-sm" id="numeroCarte" placeholder="numeroCarte" [(ngModel)]="this.formuleAb" name="numeroCarte">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=1; this.erreur='undefined';this.success='undefined'">
+                                                <input style="margin-left: 6%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="openModal(templateCanal)">
+                                            </div>
+                                        </div>
+                                   </div>
+                                </form>
+                        </div>
+                    </div>
+
+                    <div class="col-12" *ngIf="etapetnt==3">
+                        <div class="row justify-content-center">
+                                <form  class="col-10 col-lg-6 " style="margin-top:6%; text-align:center; border: 1px solid #36a9e0;padding: 6%;">
+                                        <div class="col-12">
+                                              <h5><b>Vous allez payer <span style="color:red;">{{montant}}</span> fca</b></h5>
+                                        </div>
+                
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="form-group row">
+                                                    <div class="col-12">
+                                                        <label for="formGroupExampleInput">Quel est votre mode de Paiement ?</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <form style="width: 100%;">
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.OrangeMoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="1" checked>
+                                                                <label class="form-check-label" for="OrangeMoney">
+                                                                    Orange Money
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.tigocashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="2">
+                                                                <label class="form-check-label" for="tigocashRadio">
+                                                                    Tiguo Cash
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.emoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="3">
+                                                                <label class="form-check-label" for="emoneyRadio">
+                                                                    E-MONEY
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.postcashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="4">
+                                                                <label class="form-check-label" for="postcashRadio">
+                                                                    POSTCASH
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.wizallRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="5">
+                                                                <label class="form-check-label" for="wizallRadio">
+                                                                    WIZALL
+                                                                </label>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="col-5">
+                                                    <label for="formGroupExampleInput">Numéro Associé</label>
+                                                </div>
+                                                <div class="col-7">
+                                                    <input [disabled]="!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio" style="" type="text" class="form-control input-sm" id="numeroassocie" placeholder="numeroassocie" [(ngModel)]="this.numeroassocie" name="numeroassocie">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=2; this.erreur='undefined';this.success='undefined'">
+                                                <input [disabled]="(!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio) || !numberTest(this.numeroassocie)" style="margin-left: 6%; " type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="validerpaiementTnt();">
+                                            </div>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==4">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-check" style="color:green; font-size:8rem;"></i>
+                                        <h2 style="color:green;">Opèration réussie. Merci d'avoir choisi notre service</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" 
+                                        (click)="this.print('canal') ;this.reinitialiser();etapetnt=1;">OK</button>
+                                </div>
                             </div>
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==0">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-exclamation-triangle" style="color:red; font-size:8rem;"></i>
+                                        <h2 style="color:green;">L'opèration a échouée ; vérifiez votre solde</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" (click)="this.reinitialiser();etapetnt=1;">OK</button>
+                                </div>
+                            </div>
+                    </div>
+              </tab>
+              <tab heading="RECRUTEMENT" style="background-color: white ; padding-bottom: 3rem ; box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)">
+                    <i  *ngIf=" tntloading==true" class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
+
+                    <div class="col-12" *ngIf="erreur!='undefined'" style="color:red;">
+                            {{this.erreur}}
+                    </div>
+                                   
+                    <div class="col-12" *ngIf="etapetnt!=4">
+                        <div class="row justify-content-center">
+                                <form   class="col-10 col-lg-6" style="margin-top:4%; border: 1px solid #36a9e0;padding: 6%;">
+                                   <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Nom Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="nom" placeholder="nom" [(ngModel)]="this.nomAb" name="nom">
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Prénom Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="prenom" placeholder="prenom" [(ngModel)]="this.prenomAb" name="prenom">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Téléphone Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="nom" placeholder="Telephone" [(ngModel)]="this.telAb" name="nom">
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Adresse Client</label>
+                                                <input style="" type="text" class="form-control input-sm" id="prenom" placeholder="Adresse" [(ngModel)]="this.adress" name="prenom">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Numéro Materiel</label>
+                                                <input  style="" type="number" class="form-control input-sm" id="tel" placeholder="Numéro Decodeur" [(ngModel)]="this.matAb" name="tel">
+                                            </div>
+                                        </div>
+                    
+                                        <div class="row">
+                                            <div class="form-group  col-12">
+                                                <label for="formGroupExampleInput">Bouquet</label>
+                                                <select   style="" class="form-control input-sm" id="typeDeBouquet" placeholder="numero Carte" [(ngModel)]="this.Bouquet" name="typeDeBouquet" (click)="getMontantDec()" (change)="getMontantDec()">
+                                                    <option *ngFor="let l of listeBouquet" value="{{l.libelle}}">{{l.libelle}}</option>
+                                                </select>
+                                              </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group  col-12">
+                                                <label for="formGroupMontantNet">{{montantNet}} FCFA</label>
+                                              </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=1; this.erreur='undefined';this.success='undefined'">
+                                                <input style="margin-left: 6%;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="openModal(templateCanalConfirm)">
+                                            </div>
+                                        </div>
+                                   </div>
+                                </form>
                         </div>
-                      </form>
+                    </div>
+
+                    <div class="col-12" *ngIf="etapetnt==3">
+                        <div class="row justify-content-center">
+                                <form  class="col-10 col-lg-6 " style="margin-top:6%; text-align:center; border: 1px solid #36a9e0;padding: 6%;">
+                                        <div class="col-12">
+                                              <h5><b>Vous allez payer <span style="color:red;">{{montant}}</span> fca</b></h5>
+                                        </div>
+                
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="form-group row">
+                                                    <div class="col-12">
+                                                        <label for="formGroupExampleInput">Quel est votre mode de Paiement ?</label>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <form style="width: 100%;">
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.OrangeMoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="1" checked>
+                                                                <label class="form-check-label" for="OrangeMoney">
+                                                                    Orange Money
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.tigocashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="2">
+                                                                <label class="form-check-label" for="tigocashRadio">
+                                                                    Tiguo Cash
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input  [(ngModel)]="this.emoneyRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="3">
+                                                                <label class="form-check-label" for="emoneyRadio">
+                                                                    E-MONEY
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.postcashRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="4">
+                                                                <label class="form-check-label" for="postcashRadio">
+                                                                    POSTCASH
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline" style="width: 100%;">
+                                                                <input [(ngModel)]="this.wizallRadio" class="form-check-input" type="radio" name="modedepaiement" id="modedepaiement" value="5">
+                                                                <label class="form-check-label" for="wizallRadio">
+                                                                    WIZALL
+                                                                </label>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <div class="col-5">
+                                                    <label for="formGroupExampleInput">Numéro Associé</label>
+                                                </div>
+                                                <div class="col-7">
+                                                    <input [disabled]="!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio" style="" type="text" class="form-control input-sm" id="numeroassocie" placeholder="numeroassocie" [(ngModel)]="this.numeroassocie" name="numeroassocie">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input  style="" type="button" class="btn btn-default btn-sm" id="formGroupExampleInput2" value="Retour" (click)="etapetnt=2; this.erreur='undefined';this.success='undefined'">
+                                                <input [disabled]="(!this.wizallRadio && !this.postcashRadio && !this.emoneyRadio && !this.OrangeMoneyRadio) || !numberTest(this.numeroassocie)" style="margin-left: 6%; " type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="validerpaiementTnt();">
+                                            </div>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==4">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-check" style="color:green; font-size:8rem;"></i>
+                                        <h2 style="color:green;">Opèration réussie. Merci d'avoir choisi notre service</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" 
+                                        (click)="this.print('canal') ;this.reinitialiser();etapetnt=1;">OK</button>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-12" *ngIf="etapetnt==0">
+                            <div class="row justify-content-center">
+                                <div class="col-10 col-lg-6"  style="margin-top:6%; text-align:center; border: 1px solid green;padding: 6%;">
+                                        <i class="fa fa-exclamation-triangle" style="color:red; font-size:8rem;"></i>
+                                        <h2 style="color:green;">L'opèration a échouée ; vérifiez votre solde</h2>
+                                        <button class="btn btn-success" style="margin-top:2rem;" (click)="this.reinitialiser();etapetnt=1;">OK</button>
+                                </div>
+                            </div>
+                    </div>
+              </tab>
+
+              <tab heading="Reporting" >
+
+                <i  *ngIf=" tntloading==true" class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <a style="cursor: pointer ; margin: 2rem ; text-decoration: underline;" (click)="getReport()"> Mettre à jour <i class="fa fa-refresh" ></i></a>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 ">
+                        <h1  style=" margin : 1rem ;">Solde {{this.solde}} FCFA</h1>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <input style=" margin : 1rem ; box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);"  type="text" class="form-control" placeholder="RECHERCHER ..." [(ngModel)]="filtre" name="filtre" id="filtre">
+                    </div>
+                </div>        
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12" style=" padding : 2rem ;">
+                        <table id="printrapport" class="table table-striped " style="box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); background-color: white" >
+                            <thead >
+                              <tr>
+                                <th scope="col"> Date</th>
+                                <th scope="col"> Opèration </th>
+                                <th scope="col"> Client </th>
+                                <th scope="col"> Montant </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reportLine of gestionreporting ; let i=index " >
+                                    <td>{{reportLine.dateoperation.date.substring(0,19)}}</td>
+                                    <td>{{reportLine.operateur}}</td>
+                                    <td>{{reportLine.traitement}}</td>
+                                    <td>{{currencyFormat(reportLine.montant)}}</td>
+                                    <td>{{gestionreporting.infoclient}}</td>
+                                </tr>                    
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-          </tab>
-          <tab heading="SENELEC">SENELEC</tab>
-          <tab heading="CANAL">CANAL</tab>
-          <tab heading="WOYOFAL">WOYOFAL</tab>
-          <tab heading="SDE">SDE</tab>
+                <button class="btn btn-success" style="margin-top:2rem;" 
+                    (click)=" this.print('rapport') " >
+
+                    Imprimer
+                </button>
+
+              </tab>
         </tabset>
+    </div>
+    <div class="col-sm-1 col-xs-2" style="width:100%; height: auto; text-align:center; background-color: #FFCE00">
+        <div class="row" style="padding-top: 2.5rem !important ; ">
+            <button class="btn" (click)="disconnect()" style="background-color: transparent;"> <i class="fa fa-power-off fa-2x" style="color : red" aria-hidden="true"></i></button>
+        </div>
+        <div class="row">
+            <label style="color: white">{{this.username}}</label>
+        </div>
+    </div>
+
   </div>
+</div>
+
+<div *ngIf="toconnect==true" class="container" style="text-align: center">
+
+
+    <form class="form pull-right" #loginForm="ngForm" *ngIf="phase==1" style="position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        padding: 3rem;
+        background-color: #FFCE00;">
+
+        <div class="form-group">
+            <h3 style=" text-align: center ; width: max-content; margin-bottom: 2rem">
+                <span style="padding: 1rem ; color: white ; background-color: black ; font-weight: bold ;"> CANAL+ </span>
+                <span style="padding: 1rem ; color: white ; background-color: red; font-weight: bold ;"> SENEGAL </span>
+            </h3>
+        </div>
+
+        <div class="form-group" style="color: red ;" *ngIf="this.fakevalues==true">
+            Login ou Mot de passe invalide! Veuillez reprendre la saisie.
+        </div>
+        <input class="form-group form-control" type="text" required autofocus id="userName" name="userName" [(ngModel)]="this.login" placeholder="Login"/>
+        <input class="form-group form-control" type="password"  [(ngModel)]="this.pwd"  required id="userPwd" name="userPwd" placeholder="Mot de Passe"/>
+        <button class="btn btn-success" [disabled]="!loginForm.valid"  (click)="authentificate()"> Valider <i class="fa fa-arrow-right" style="color : white" aria-hidden="true"></i></button>
+
+        <button class="btn" style="background-color: black ; color: white; margin-left: 0.5rem" (click)="openModal(templateInscription) ; reinitialiser()"> Inscription <i class="fa fa-user-plus" style="color : white" aria-hidden="true"></i></button>
+
+    </form>
+    <form class="form pull-right" #loginForm="ngForm" *ngIf="phase==2" style="position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        padding: 3rem;
+        background-color: #FFCE00;">
+
+        <div class="form-group">
+            <h3 style=" text-align: center ; width: max-content; margin-bottom: 2rem">
+                <span style="padding: 1rem ; color: white ; background-color: black ; font-weight: bold ;"> CANAL+ </span>
+                <span style="padding: 1rem ; color: white ; background-color: red; font-weight: bold ;"> SENEGAL </span>
+            </h3>
+        </div>
+
+        <div class="form-group" style="color: white ;" *ngIf="this.fakevalues2==true">
+            Code invalide! Veuillez reprendre la saisie.
+        </div>
+        <input class="form-group form-control" type="password"  [(ngModel)]="this.code"  required id="userPwd" name="userPwd" placeholder="Token SMS"/>
+        <button class="btn btn-success" [disabled]="!loginForm.valid"  (click)="authentificateBySMS()"> Login <i class="fa fa-arrow-right" style="color : white" aria-hidden="true"></i></button>
+
+    </form>
 </div>
 
 <!-- ------------------------------------------------
                                Modales
  ----------------------------------------------------- -->
 
- <ng-template #template>
+ <ng-template #templateTNT>
     <div class="modal-header">
       <h4 class="modal-title pull-left">Durée</h4>
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -152,24 +625,224 @@
             <div class="row">
                 <div class="form-group col-12">
                     <label for="formGroupExampleInput">Nombre De Mois </label>
-                    <input style="border-radius: 2rem 0rem 2rem 2rem;" type="text" class="form-control input-sm" id="nombreDeMois" placeholder="nombreDeMois" [(ngModel)]="this.nombreDeMois" name="nombreDeMois">
+                    <input style="" type="number" class="form-control input-sm" id="nombreDeMois" placeholder="nombreDeMois" [(ngModel)]="this.nombreDeMois" name="nombreDeMois">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group  col-12">
                     <label for="formGroupExampleInput">Type De Bouquet</label>
-                    <select   style="border-radius: 2rem 0rem 2rem 2rem;" class="form-control input-sm" id="typeDeBouquet" placeholder="numero Carte" [(ngModel)]="this.typeDeBouquet" name="typeDeBouquet">
-                        <option _ngcontent-c9="">Maanaa</option>
-                        <option _ngcontent-c9="">Boul khool</option>
-                        <option _ngcontent-c9="">Maanaa + Boul khool</option>
+                    <select   style="" class="form-control input-sm" id="typeDeBouquet" placeholder="numero Carte" [(ngModel)]="this.typeDeBouquet" name="typeDeBouquet">
+                        <option value="Maanaa" >Maanaa</option>
+                        <option value="Boul khool">Boul khool</option>
+                        <option value="Maanaa + Boul khool" >Maanaa + Boul khool</option>
                     </select>
                   </div>
             </div>
             <div class="row">
                 <div class="form-group  col-12">
-                    <input style="border-radius: 2rem 0rem 2rem 2rem; float:right;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="rechercher" (click)="etapetnt=3;modalRef.hide()">
+                    <input [disabled]="!this.nombreDeMois || !this.typeDeBouquet" style="border-radius: 2rem 0rem 2rem 2rem; float:right;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="modalRef.hide();tarifTntAbon();">
                 </div>
             </div>
         </div>
     </div>
   </ng-template>
+
+
+ <ng-template #templateCanal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Durée</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="form-group col-12">
+                    <label for="formGroupExampleInput">Nombre De Mois </label>
+                    <input style="" type="number" class="form-control input-sm" id="nombreDeMois" placeholder="nombreDeMois"  (change)="getMontant()" [(ngModel)]="this.nombreDeMois" name="nombreDeMois">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group  col-12">
+                    <label for="formGroupExampleInput">Type De Bouquet</label>
+                    <select   style="" class="form-control input-sm" id="typeDeBouquet" placeholder="numero Carte" [(ngModel)]="this.Bouquet" name="typeDeBouquet" (click)="getMontant()" (change)="getMontant()">
+                        <option *ngFor="let l of listeBouquet" value="{{l.libelle}}">{{l.libelle}}</option>
+                    </select>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="form-group  col-12">
+                    <label for="formGroupMontantNet">{{montantNet}} FCFA</label>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="form-group  col-12">
+                    <input [disabled]="!this.nombreDeMois || !this.Bouquet" style="float:right;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="modalRef.hide();tarifTntAbon();">
+                </div>
+            </div>
+        </div>
+    </div>
+  </ng-template>
+
+
+ <ng-template #templateCanalConfirm>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Vérification Saisie</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="form-group col-12 col-xs-12">
+                    <label for="formGroupExampleInput">Prenon & Nom: {{this.prenomAb}} {{this.nomAb}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group   col-12 col-xs-12">
+                    <label for="formGroupExampleInput">Téléphone: {{this.telAb}}</label>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="form-group   col-12 col-xs-12">
+                    <label for="formGroupExampleInput">Adresse: {{this.adress}}</label>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="form-group   col-12 col-xs-12">
+                    <label for="formGroupExampleInput">Materiel: {{this.matAb}}</label>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="form-group   col-12 col-xs-12">
+                    <label for="formGroupMontantNet">Montant Bouquet Abonnement: {{montantNet}} FCFA</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col-12">
+                    <input style="margin-right: 1rem" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="modalRef.hide();validrecrutement();">
+
+                    <input style="" type="button" class="btn btn-danger btn-sm" id="formGroupExampleInput3" value="Annuler" (click)="modalRef.hide()">
+
+                </div>
+            </div>
+        </div>
+    </div>
+  </ng-template>
+
+
+ <ng-template #templateInscription>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"> Nouvel Utilisateur </h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+
+            <i  *ngIf=" registloading==true" class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
+
+            <div class="col-12" *ngIf=" erreur!='undefined' && erreur!='success' " style="color:red;">
+                    {{this.erreur}}
+            </div>
+
+            <div class="col-12" *ngIf=" erreur=='success' " style="text-align: center">
+                <i class="fa fa-check" style="color:#FFCE00; font-size:8rem;"></i>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12 col-xs-12">
+                    <label for="formGroupExampleInput">Code Agent Commercial</label>
+                    <input style="" type="text" class="form-control input-sm" id="codecreation" placeholder="Code de Création"  [(ngModel)]="this.codecreation" name="codecreation">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="formGroupExampleInput">Prénom</label>
+                    <input style="" type="text" class="form-control input-sm" id="prenomclient" placeholder="Prénom Client" [(ngModel)]="this.prenomclient" name="prenomclient">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="formGroupExampleInput">Nom</label>
+                    <input style="" type="text" class="form-control input-sm" id="nomclient" placeholder="Nom Client" [(ngModel)]="this.nomclient" name="nomclient">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="formGroupExampleInput">Email</label>
+                    <input style="" type="text" class="form-control input-sm" id="emailpoint" placeholder="Email point" [(ngModel)]="this.emailpoint" name="emailpoint">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="formGroupExampleInput">Téléphone (sans indicatif)</label>
+                    <input style="" type="text" class="form-control input-sm" id="telpoint" placeholder="Téléphone Point" [(ngModel)]="this.telpoint" name="telpoint">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12 col-xs-12">
+                    <label for="formGroupExampleInput">Région</label>
+                    <input style="" type="text" class="form-control input-sm" id="regionpoint" placeholder="Région point" [(ngModel)]="this.regionpoint" name="regionpoint">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12 col-xs-12">
+                    <label for="formGroupExampleInput">Adresse</label>
+                    <input style="" type="text" class="form-control input-sm" id="adressepoint" placeholder="Adresse point" [(ngModel)]="this.adressepoint" name="adressepoint">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col-12">
+                    <input [disabled]="!this.codecreation || !this.prenomclient || !this.nomclient || !this.emailpoint || !this.telpoint || !this.adressepoint" style="float:right;" type="button" class="btn btn-success btn-sm" id="formGroupExampleInput2" value="valider" (click)="registerCustomer();">
+                </div>
+            </div>
+        </div>
+    </div>
+  </ng-template>
+
+
+  <div style="visibility: hidden;">
+    <div class="panel-heading" id="printcanal">
+      <div class="panel panel-default"  id="tntrecuimpressionabonnement">
+        <div class="panel-heading">
+          <img src="../../assets/canal.png"  height="100"/>
+          <p align="right" >
+            <strong>Entreprise:</strong> <br>
+            <strong>Guichetier(e):</strong> <br>
+            <strong>Service clientèle:</strong><br>
+            77 844 66 78<br>
+          </p>
+        </div>
+        <div class="panel-body">
+          <table>
+            <tr class="text-uppercase">
+              <td>
+                Nom Client: {{this.nomAb}}<br>
+                Prénom Client: {{this.prenomAb}}<br>
+              </td>
+              <td width="100px">&nbsp;&nbsp;</td>
+              <td>
+                Numéro Abonné: {{this.numAb}}<br>
+                Numéro Matériel: {{this.matAb}}<br>
+                Type bouquet: {{this.Bouquet}}<br>
+                Montant: {{this.montantNet}}<br>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="panel-footer">
+          Durée Abonnement: {{this.nombreDeMois}} mois<br>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div *ngIf="this.loading==true">
+    <app-loader></app-loader>
+</div>
