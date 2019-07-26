@@ -85,6 +85,10 @@ export class AppComponent implements OnInit {
   adressepoint : any ;
   regionpoint : any ;
 
+  dateDebut:any;
+  dateFin:any;
+
+
 
   listeBouquet =[
     {libelle:'Date à date Access'},
@@ -97,10 +101,18 @@ export class AppComponent implements OnInit {
 
   tntloading =false; 
 
-
+  rechercher(){
+   console.log(this.dateDebut+" "+this.dateFin);
+    this._utilsService.checkCautionTNT().then(res =>{
+      console.log(res);
+      
+    })
+  }
   constructor(private modalService: BsModalService, public tntCaller:TntService,private _postCashService: PostCashService, private _tntService:TntService, private _wizallService : WizallService, private _omService:OrangemoneyService, private _tcService: TigocashService, private expressocashwebservice : ExpressocashService, private authentificationService:AuthentificationService, private _canalService:CanalService, private _gestionreportingService : Gestionreporting, private _utilsService : UtilsService ) {}
  
   ngOnInit (){
+    this.dateDebut = new Date().toJSON().split('T')[0];
+    this.dateFin = new Date().toJSON().split('T')[0];
     this.tntloading = undefined;
     this.externalUrl();
     this.toconnect = true ;
